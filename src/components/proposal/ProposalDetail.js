@@ -68,7 +68,25 @@ const urlify = (text) => {
   });
 };
 
-const ProposalDetail = ({ proposal, processProposal, submitVote, canVote }) => {
+const commnetsList = (comments) => {
+  return comments.map((post) => {
+    return (
+      <div key={post.id}>
+        <div>username: {post.username}</div>
+        <div>created at: {post.created_at}</div>
+        <div dangerouslySetInnerHTML={{ __html: post.cooked }} />
+      </div>
+    );
+  });
+};
+
+const ProposalDetail = ({
+  proposal,
+  processProposal,
+  submitVote,
+  canVote,
+  comments,
+}) => {
   const [currentUser] = useContext(CurrentUserContext);
   const [daoData] = useContext(DaoDataContext);
 
@@ -154,6 +172,14 @@ const ProposalDetail = ({ proposal, processProposal, submitVote, canVote }) => {
       {proposal.status === 'ReadyForProcessing' && currentUser && (
         <button onClick={() => processProposal(proposal)}>Process</button>
       )}
+
+      {comments ? (
+        <div>
+          <h2>comments:</h2>
+          <div>{commnetsList(comments)}</div>
+          <button>read more</button>
+        </div>
+      ) : null}
 
       {+daoData.version !== 2 || proposal.sponsored ? (
         <VoteControl

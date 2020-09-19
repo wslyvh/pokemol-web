@@ -1,7 +1,8 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
 import { ethToWei } from '@netgum/utils'; // returns BN
+import { get } from '../../utils/CommentsRequests';
 
 import { GET_PROPOSAL } from '../../utils/Queries';
 import ProposalDetail from '../../components/proposal/ProposalDetail';
@@ -19,6 +20,7 @@ const Proposal = (props) => {
   const [txLoading, setTxLoading] = useContext(LoaderContext);
   const [currentWallet] = useContext(CurrentWalletContext);
   const [daoService] = useContext(DaoServiceContext);
+  const [comments, setComments] = useState();
 
   const { loading, error, data, refetch } = useQuery(GET_PROPOSAL, {
     variables: { id: `${daoService.daoAddress.toLowerCase()}-proposal-${id}` },
@@ -68,6 +70,22 @@ const Proposal = (props) => {
     }
   };
 
+  useEffect(() => {
+    const commentsAPI = 't/12.json';
+
+    const getComments = async (url) => {
+      try {
+        const res = await get(commentsAPI);
+        const posts = res.post_stream.posts;
+        console.log(posts);
+        setComments(posts);
+      } catch (err) {
+        console.log('api fetch error');
+      }
+    };
+    getComments(commentsAPI);
+  }, []);
+
   if (loading) return <Loading />;
   if (error) return <ErrorMessage message={error} />;
 
@@ -80,6 +98,7 @@ const Proposal = (props) => {
           submitVote={submitVote}
           processProposal={processProposal}
           proposal={data.proposal}
+          comments={comments}
         />
       )}
     </>
