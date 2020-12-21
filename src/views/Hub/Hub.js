@@ -8,6 +8,7 @@ import MemberDaoList from '../../components/Hub/MemberDaoList';
 import HubSignedOut from '../../components/Hub/HubSignedOut';
 import HubProfileCard from '../../components/Hub/HubProfileCard';
 import HubActivityFeed from '../../components/Hub/HubActivityFeed';
+import FeaturedDaos from '../../components/Hub/FeaturedDaos';
 import TextBox from '../../components/Shared/TextBox';
 import ContentBox from '../../components/Shared/ContentBox';
 import { HUB_MEMBERSHIPS } from '../../utils/apollo/member-queries';
@@ -86,20 +87,30 @@ const Hub = () => {
             </Box>
 
             <Box w={['100%', null, null, null, '40%']}>
-              <Box
-                fontSize='md'
-                fontFamily='heading'
-                textTransform='uppercase'
-                fontWeight={700}
-              >
-                Recent Activity
-              </Box>
               {v2Daos.length > 0 ? (
-                <HubActivityFeed daos={v2Daos} />
+                <>
+                  <Box
+                    fontSize='md'
+                    fontFamily='heading'
+                    textTransform='uppercase'
+                    fontWeight={700}
+                  >
+                    Recent Activity
+                  </Box>
+                  <HubActivityFeed daos={v2Daos} />
+                </>
               ) : (
-                <TextBox size='sm' my={35}>
-                  Recent Activity from your daos will show here
-                </TextBox>
+                <>
+                  <Box
+                    fontSize='md'
+                    fontFamily='heading'
+                    textTransform='uppercase'
+                    fontWeight={700}
+                  >
+                    Find A DAO
+                  </Box>
+                  <FeaturedDaos />
+                </>
               )}
             </Box>
           </Flex>
