@@ -25,10 +25,13 @@ const TributeInput = ({
   };
 
   const checkUnlocked = async (token, amount) => {
+    console.log('checkUnlocked', token, amount);
     if (amount === '') {
       return;
     }
     const amountApproved = await daoService.token.unlocked(token);
+    console.log(amountApproved, amount);
+    // this needs to check token decimals
     const isUnlocked = amountApproved > amount;
     setUnlocked(isUnlocked);
   };
